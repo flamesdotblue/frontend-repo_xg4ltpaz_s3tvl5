@@ -1,28 +1,60 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import Hero from './components/Hero';
+import WalletCards from './components/WalletCards';
+import MetalActions from './components/MetalActions';
+import AppWalletActions from './components/AppWalletActions';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedWallet, setSelectedWallet] = useState('metal'); // 'metal' | 'app'
+  const [metal, setMetal] = useState('gold'); // 'gold' | 'silver'
+
+  const handleMetalAction = (action) => {
+    alert(`${action.toUpperCase()} ${metal.toUpperCase()}`);
+  };
+
+  const handleAppAction = (action) => {
+    alert(`App Wallet: ${action.toUpperCase()}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-white">
+      <div className="mx-auto max-w-md px-4 py-5">
+        <Hero />
+
+        <div className="mt-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-800">View Wallets</h2>
+            <div className="flex gap-2 bg-slate-100 rounded-xl p-1">
+              <button
+                onClick={() => setSelectedWallet('metal')}
+                className={`px-3 py-1.5 text-sm rounded-lg transition ${
+                  selectedWallet === 'metal' ? 'bg-white shadow text-slate-900' : 'text-slate-600'
+                }`}
+              >
+                Gold/Silver
+              </button>
+              <button
+                onClick={() => setSelectedWallet('app')}
+                className={`px-3 py-1.5 text-sm rounded-lg transition ${
+                  selectedWallet === 'app' ? 'bg-white shadow text-slate-900' : 'text-slate-600'
+                }`}
+              >
+                App Wallet
+              </button>
+            </div>
+          </div>
+
+          <WalletCards selected={selectedWallet} onSelect={setSelectedWallet} />
+
+          {selectedWallet === 'metal' ? (
+            <MetalActions metal={metal} onMetalChange={setMetal} onAction={handleMetalAction} />
+          ) : (
+            <AppWalletActions onAction={handleAppAction} />
+          )}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
